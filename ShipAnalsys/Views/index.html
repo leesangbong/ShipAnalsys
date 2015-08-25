@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html ng-app="iso19030">
+<head>
+    <title>ShipCare</title>
+
+    <script src="../component/jquery/jquery-2.1.4.js"></script>
+    <script src="../component/semantic/semantic.min.js"></script>
+    <script src="../component/angular/angular.min.js"></script>
+    <script src="../component/semantic/components/dropdown.min.js"></script>
+    <script src="../component/angular/angular-resource.min.js"></script>
+    <link rel="stylesheet" href="../component/semantic/semantic.min.css" />
+    <link rel="stylesheet" href="../component/semantic/components/dropdown.css" />
+    <link rel="stylesheet" href="Css/customCss.css" />
+    <script>
+        angular.module("iso19030", ['ngResource']);
+    </script>
+    <script src="Scripts/iso19030.js"></script>
+    <script src="Scripts/ShipDataControllers.js"></script>
+    <script src="Scripts/customFilters.js"></script>
+</head>
+
+<body ng-controller="shipDataController">
+    <div class="ui top attached button">SHIPCARE PRO 0.01V</div>
+
+
+    <div class="ui grid">
+
+        <div class="row">
+            <div class="one wide column">
+            </div>
+            <div class="fourteen wide column">
+                <div class="ui two column grid">
+                    <div class="column">
+                        <p></p>
+                        <h2 class="ui header">
+                            <i class="unhide icon"></i>
+                            Analsys Condtion
+                        </h2>
+
+                        <div class="ui raised segment">
+                            <a class="ui teal ribbon label">조회 날짜 선택</a>
+                            <p></p>
+                            <div class="ui left action input">
+                                <button class="ui icon button">
+                                    <i class="calendar icon"></i>
+                                </button>
+                                <input type="text" placeholder="2015-03-01 12:33:22" ng-model="startDate_input" >
+                            </div>
+                            <i class="big resize horizontal icon"></i>
+                            <div class="ui left action input">
+                                <button class="ui icon button">
+                                    <i class="calendar icon"></i>
+                                </button>
+                                <input type="text" placeholder="2015-03-01 12:33:22" ng-model="endDate_input">
+                            </div>
+                            <div class="ui hidden divider"></div>
+                            <a class="ui teal ribbon label">조회 간격 조회</a>
+                            <p></p>
+                           
+                            <select class="ui dropdown" ng-model="interval_input">
+                                <option value="">시간 선택</option>
+                                <option value="1">1분</option>
+                                <option value="5">5분</option>
+                                <option value="10">10분</option>
+                                <option value="15">15분</option>
+                                <option value="20">20분</option>
+                                <option value="30">30분</option>
+                            </select>
+
+                          <div class="ui hidden divider"></div>
+
+                            <a class="ui teal ribbon label">필터 옵션</a>
+                            <p></p>
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" name="public">
+                                <label>Outlier Detection (Chauvent's criterion)</label>
+                            </div>
+                            <p></p>
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" name="public">
+                                <label>Validation</label>
+                            </div>
+                            <p></p>
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" name="public">
+                                <label>Wind resistance Correction</label>
+                            </div>
+                            <p></p>
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" name="public">
+                                <label>Draught Correction</label>
+                            </div>
+                            <p></p>
+
+                            <div class="ui hidden divider"></div>
+                            <div class="ui divider"></div>
+                            <div class="ui basic clearing segment">
+                                <div class="ui green basic right floated button">
+                                    <i class="setting icon"></i>
+                                    Analsys!!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <p></p>
+                        <h2 class="ui header">
+                            <i class="line chart icon"></i>
+                            Analsys Result
+                        </h2>
+                        <div class="ui segment">
+                            <a class="ui orange right ribbon label">Specs</a>
+                            <p></p>
+                            <a class="ui teal right ribbon label">Reviews</a>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui raised segment">
+                    <div class="column">
+                        <a class="ui black left ribbon label">Back Data</a>
+                        <div class="ui teal right floated button" ng-click="listShipData()">
+                            <i class="setting icon"></i>
+                            조회하기
+                        </div>
+                        <p></p>
+                       <div class="ui blurring segment">
+                            <div class="ui inverted dimmer">
+                                <div class="ui hidden section divider" ng-show="loading"></div> 
+                                <div class="loader">
+                                    <ipre></ipre><ipre></ipre><ipre></ipre><ipre></ipre><ipre></ipre>
+                                </div>
+                            </div>
+                                <table class="ui celled table shipdata" ng-controller="shipDataListController">
+                                    <thead>
+                                        <tr class="center aligned">
+                                            <th>Date</th>
+                                            <th>대수속도</th>
+                                            <th>축마력</th>
+                                            <th>상대풍향속도</th>
+                                            <th>상대풍향스피드</th>
+                                            <th>대지속도</th>
+                                            <th>선박헤딩</th>
+                                            <th>축RPM</th>
+                                            <th>흘수(fore)</th>
+                                            <th>흘수(aft)</th>
+                                            <th>수심</th>
+                                            <th>타각</th>
+                                            <th>해수온도</th>
+                                            <th>유량계</th>
+                                            <th>축토크</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                        <tr class="center aligned" ng-repeat="item in data.shipDatas | range:selectedPage:pageSize">
+                                            <td>{{item.date | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                            <td>{{item.speedVs | number:2 }}</td>
+                                            <td>{{item.powerDel | number:2}}</td>
+                                            <td>{{item.relWindDir | number:2}}</td>
+                                            <td>{{item.relWindSpd | number:2}}</td>
+                                            <td>{{item.speedVg | number:2}}</td>
+                                            <td>{{item.headingGps | number:2}}</td>
+                                            <td>{{item.shaftRev | number:2}}</td>
+                                            <td>{{item.draughtAft | number:2}}</td>
+                                            <td>{{item.draughtFore | number:2}}</td>
+                                            <td>{{item.waterDepth | number:2}}</td>
+                                            <td>{{item.rudderAngle | number:2}}</td>
+                                            <td>{{item.seawaterTemp | number:2}}</td>
+                                            <td>{{item.flowMeterMeHfo | number:10}}</td>
+                                            <td>{{item.shaftTorque | number:2}}</td>
+                                        </tr>
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="15">
+                                                <div class="ui right floated pagination menu">
+                                                    <a class="icon item">
+                                                        <i class="left chevron icon"></i>
+                                                    </a>
+                                                    <a ng-repeat="page in data.shipDatas | pageCount:pageSize" ng-click="selectPage($index+1)" class="item" ng-class="getPageClass($index+1)">
+                                                        {{$index +1}}
+                                                    </a>
+
+                                                    <a class="icon item">
+                                                        <i class="right chevron icon"></i>
+                                                    </a>
+                                                </div>
+
+                                            </th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                             
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="one wide column">
+            </div>
+        </div>
+    </div>
+   <script>
+
+       $('.ui.dropdown')
+         .dropdown({
+
+         })
+       ;
+
+
+   </script>
+</body>
+</html>
