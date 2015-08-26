@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,6 +10,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Data.Entity.SqlServer;
 
 namespace ShipAnalsys.Controllers
 {
@@ -65,8 +67,15 @@ namespace ShipAnalsys.Controllers
 
              spp = 
              from prod2 in groupData
-             where prod2.draughtAft > groupData.Average(prod3 => prod3.draughtAft - 100)
-             select prod2,
+             //where prod2.draughtAft > groupData.Average(prod3 => prod3.draughtAft - 100)
+             select new {
+
+                
+                 arspro = (1/(DbFunctions.StandardDeviationP(groupData.Select(d => d.flowMeterMeHfo)) * SqlFunctions.SquareRoot(2 * Math.PI))) * (Math.Pow(Math.E, (-1 * Math.Pow((double)(prod2.flowMeterMeHfo - groupData.Average(d => d.flowMeterMeHfo)), 2) / (2 * Math.Pow((double)(DbFunctions.StandardDeviationP(groupData.Select(d => d.flowMeterMeHfo))),2)))))*groupData.Count(),
+
+                
+
+            },
 
                 //speedVs = ((decimal)222.2),
 
