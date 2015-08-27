@@ -20,9 +20,9 @@ namespace ShipAnalsys.Models
         {
         }
 
-        public System.Data.Entity.DbSet<ShipAnalsys.Models.ShipList> ShipLists { get; set; }
+        public DbSet<ShipList> ShipLists { get; set; }
 
-        public System.Data.Entity.DbSet<ShipAnalsys.Models.ShipData> ShipDatas { get; set; }
+        public DbSet<ShipData> ShipDatas { get; set; }
 
     protected override void OnModelCreating(DbModelBuilder modelBuilder)
     {
